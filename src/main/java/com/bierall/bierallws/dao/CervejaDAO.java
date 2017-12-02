@@ -1,8 +1,13 @@
 package com.bierall.bierallws.dao;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +43,13 @@ public class CervejaDAO {
 	public void delete(final Long id) {
 		final Cerveja cerveja = this.findById(id);
 		this.em.remove(cerveja);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Cerveja> findAll() {
+		final Session session = (Session) this.em.getDelegate();
+		final DetachedCriteria criteria = DetachedCriteria.forClass(Cerveja.class);
+		return (List<Cerveja>) criteria.getExecutableCriteria(session).list().stream().collect(Collectors.toList());
 	}
 
 }

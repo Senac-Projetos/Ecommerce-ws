@@ -1,4 +1,4 @@
-package com.bierall.bierallws.cerveja;
+package com.bierall.bierallws.cervejaria;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bierall.bierallws.cerveja.model.Cerveja;
-import com.bierall.bierallws.cerveja.rn.CervejaRN;
+import com.bierall.bierallws.cervejaria.model.Cervejaria;
+import com.bierall.bierallws.cervejaria.rn.CervejariaRN;
 import com.bierall.bierallws.util.RestUtil;
 import com.google.gson.Gson;
 
@@ -31,11 +31,11 @@ import com.google.gson.Gson;
  *
  */
 @RestController
-@RequestMapping("/cerveja")
-public class CervejaWS {
+@RequestMapping("/cervejaria")
+public class CervejariaWS {
 
 	@Autowired
-	private CervejaRN cervejaRN;
+	private CervejariaRN cervejariaRN;
 
 	
 	
@@ -44,7 +44,7 @@ public class CervejaWS {
 	@RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll() {
 		HttpStatus httpStatus = HttpStatus.OK;
-		final List<CervejaResponse> cervejariasResponse = this.cervejaRN.getCervejasResponse();
+		final List<CervejariaResponse> cervejariasResponse = this.cervejariaRN.getCervejariasResponse();
 		if (cervejariasResponse == null) {
 			httpStatus = HttpStatus.NOT_FOUND;
 		}
@@ -58,7 +58,7 @@ public class CervejaWS {
 	@RequestMapping(method = GET, path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> get(@PathVariable(required = true) final Long id) {
 		HttpStatus httpStatus = HttpStatus.OK;
-		final CervejaResponse cervejaResponse = this.cervejaRN.getCervejaResponse(id);
+		final CervejariaResponse cervejaResponse = this.cervejariaRN.getCervejariaResponse(id);
 		if (cervejaResponse == null) {
 			httpStatus = HttpStatus.NOT_FOUND;
 		}
@@ -71,11 +71,11 @@ public class CervejaWS {
 	
 	
 	@RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(@Valid @RequestBody(required = true) final Cerveja cerveja, final Errors errors) {
+	public ResponseEntity<?> save(@Valid @RequestBody(required = true) final Cervejaria cervejaria, final Errors errors) {
 		if (RestUtil.existeErroNaRequisicao(errors)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestUtil.getErros(errors));
 		} else {
-			this.cervejaRN.salvar(cerveja);
+			this.cervejariaRN.salvar(cervejaria);
 		}
 		return ResponseEntity.status(CREATED).build();
 	}
@@ -86,11 +86,11 @@ public class CervejaWS {
 	
 	
 	@RequestMapping(method = PUT, consumes = APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> update(@Valid @RequestBody(required = true) final Cerveja cerveja, final Errors errors) {
+	public ResponseEntity<?> update(@Valid @RequestBody(required = true) final Cervejaria cervejaria, final Errors errors) {
 		if (RestUtil.existeErroNaRequisicao(errors)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestUtil.getErros(errors));
 		} else {
-			this.cervejaRN.atualizar(cerveja);
+			this.cervejariaRN.atualizar(cervejaria);
 		}
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
@@ -101,7 +101,7 @@ public class CervejaWS {
 
 	@RequestMapping(method = DELETE, path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> delete(@PathVariable(required = true) final Long id) {
-		this.cervejaRN.deletar(id);
+		this.cervejariaRN.deletar(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
